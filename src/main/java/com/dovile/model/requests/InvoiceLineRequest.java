@@ -57,11 +57,7 @@ public class InvoiceLineRequest {
     }
 
     public void setProductId(Integer productId) {
-        if (productId != null){
         this.productId = productId;
-        } else {
-            this.productId = null;
-        }
     }
     
     

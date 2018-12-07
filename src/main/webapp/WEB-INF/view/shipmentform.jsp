@@ -51,7 +51,7 @@
                     </c:if>  
                     <c:forEach begin="1" end="${count}" varStatus="loop">
                         <li>
-                            <button class="remove">Remove</button>
+                            <button type="button" class="remove">Remove</button>
                             <div>
                                 <label name="count">Id (Product identificator, if new good please leave blank) </label> 
                                 <input type= "number" name="invoiceLineList[${loop.index-1}].productId" max="${fn:length(products)}" />
@@ -123,37 +123,44 @@
 
             $("#add-new").click(function () {
                 $(".item li:last").clone()
-                    .find("input").each(function () {
+                        .find("input").each(function () {
                     $(this).attr('name', function (_, attr) {
                         var i = attr.match(/[0-9]+/g);
                         var returnIndex = attr.replace(i[0], parseInt(i[0]) + 1);
                         return returnIndex;
                     });
-                  
-                }).end()
-                         .find("input[name$=count]").attr("value",1).end()
-                .appendTo(".item");
-            });
-            
-            $(".remove").click( function(){ $(this).parent().remove();});
-            
-            
-            
-            var d = new Date();
-            
-                              
-            var toDoubleDigits = function(i){
-                i ="" + i;
-                if( i.length == 1){
-                i = "0" + i;
-            }
-            return i;
-            }
-                        
-            var receiveDate = d.getFullYear()  + "-" +toDoubleDigits(d.getMonth()+1)  + "-" +  toDoubleDigits(d.getDate());
 
-             $("input[name=recieveDate]").attr("value", receiveDate);
-            
+                }).end()
+                        .find("input[name$=count]").attr("value", 1).end()
+                        .find(".remove").click(function () {
+                    $(this).parent().remove();
+                }).end()
+
+                        .appendTo(".item");
+
+            });
+
+            $(".remove").click(function () {
+                $(this).parent().remove();
+            });
+
+
+
+            var d = new Date();
+
+
+            var toDoubleDigits = function (i) {
+                i = "" + i;
+                if (i.length == 1) {
+                    i = "0" + i;
+                }
+                return i;
+            }
+
+            var receiveDate = d.getFullYear() + "-" + toDoubleDigits(d.getMonth() + 1) + "-" + toDoubleDigits(d.getDate());
+
+            $("input[name=recieveDate]").attr("value", receiveDate);
+
 
 //var i = 1;
 //$("button").click(function() ​​​{
