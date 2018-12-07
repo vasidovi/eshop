@@ -160,7 +160,7 @@ public class MainController {
                 Integer reserved = line.getCount();
                 Product product = line.getProductId();
                 Integer productId = product.getId();
-                Product p = productServices.reduceProductTotalCountBy(reserved, productId);
+                Product p = productServices.reduceProductTotalCountBy(productId, reserved);
 
                 activeBasket.setPurchaseDate(new Date());
                 basketDAO.save(activeBasket);
