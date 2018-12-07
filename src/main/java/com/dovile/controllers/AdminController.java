@@ -84,10 +84,10 @@ public class AdminController {
 }
          
     // make into post mapping
-    @GetMapping("/newGoods/{lines}")
+    @GetMapping("/newShipment")
      public String registerNewShipmentv2(HttpServletRequest request,
              Model model
-            ,@PathVariable Integer lines
+//            ,@PathVariable Integer lines
      ) {
           HttpSession session = request.getSession();
         Boolean validAccess = (Boolean) session.getAttribute("admin");
@@ -95,7 +95,7 @@ public class AdminController {
         if (validAccess){
                             model.addAttribute("products", productDAO.findAll());
 
-            model.addAttribute("lines", lines);
+//            model.addAttribute("lines", lines);
             return "shipmentform";        
         } else {
          return "index";   
@@ -152,7 +152,6 @@ public class AdminController {
              // suppress warning
              }
              
-              System.out.println("!!!!!!!!" + productId);
              Product product = null;
              
              

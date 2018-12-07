@@ -86,7 +86,7 @@
         
         
         
-                        <a href="${pageContext.request.contextPath}/newGoods/2" /><button>New shipment</button></a>                             
+                        <a href="${pageContext.request.contextPath}/newShipment" /><button>New shipment</button></a>                             
                 
         
         

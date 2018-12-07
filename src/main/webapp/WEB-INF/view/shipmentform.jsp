@@ -42,35 +42,25 @@
                 </div>    
                 </br>
                 <ol class="item">
-                    <c:if test="${empty lines}">
-                        <c:set var="count" value="2" scope="page"/>
-                    </c:if>
-                    <c:if test="${not empty lines}">
-                        <c:set var="count" value="${lines}" scope="page"/>
-                        <c:set var="index" value="0" scope="page"/>
-                    </c:if>  
-                    <c:forEach begin="1" end="${count}" varStatus="loop">
                         <li>
                             <button type="button" class="remove">Remove</button>
                             <div>
                                 <label name="count">Id (Product identificator, if new good please leave blank) </label> 
-                                <input type= "number" name="invoiceLineList[${loop.index-1}].productId" max="${fn:length(products)}" />
+                                <input type= "number" name="invoiceLineList[0].productId" max="${fn:length(products)}" />
                             </div>                                               
                             <div>
                                 <label name="count">Count:  </label> 
-                                <input type= "number" name="invoiceLineList[${loop.index-1}].count" value="1" required="required"/>
+                                <input type= "number" name="invoiceLineList[0].count" value="1" required="required"/>
                             </div>
                             <div>
                                 <label name="price">Price:  </label> 
-                                <input name="invoiceLineList[${loop.index-1}].price" pattern="\d+(.\d{2})?"/>   
+                                <input name="invoiceLineList[0].price" pattern="\d+(.\d{2})?"/>   
                             </div>
                             <div>   
                                 <label name="name">Name:  </label> 
-                                <input name="invoiceLineList[${loop.index-1}].name"/>
+                                <input name="invoiceLineList[0].name"/>
                             </div>
-                        </li>
-                        <c:set var="index" value="${index +1 }" scope="page"/>    
-                    </c:forEach>                      
+                        </li>                    
                 </ol>
                 <button type="button" id="add-new" style="width: 80px">Add New</button>
                 <input type="submit" value="Submit">                
@@ -133,7 +123,7 @@
                 }).end()
                         .find("input[name$=count]").attr("value", 1).end()
                         .find(".remove").click(function () {
-                    $(this).parent().remove();
+                   removeItem($(this));
                 }).end()
 
                         .appendTo(".item");
@@ -141,12 +131,19 @@
             });
 
             $(".remove").click(function () {
-                $(this).parent().remove();
+                removeItem($(this));
             });
 
 
 
             var d = new Date();
+            
+            
+            var removeItem = function(e) {
+                if ($(".remove").length > 1){
+                e.parent().remove();
+            }
+            }
 
 
             var toDoubleDigits = function (i) {
