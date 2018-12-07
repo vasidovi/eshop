@@ -5,8 +5,6 @@
  */
 package com.dovile.model.requests;
 
-import com.dovile.model.Invoice;
-import com.dovile.model.Product;
 import java.math.BigDecimal;
 
 /**
@@ -18,12 +16,12 @@ public class InvoiceLineRequest {
     private int count;
     private BigDecimal price;    
     private String name;      
-    private int productId;
+    private Integer productId;
 
     public InvoiceLineRequest() {
     }
 
-    public InvoiceLineRequest(int count, BigDecimal price, String name, int productId) {
+    public InvoiceLineRequest(int count, BigDecimal price, String name, Integer productId) {
         this.count = count;
         this.price = price;
         this.name = name;
@@ -58,8 +56,12 @@ public class InvoiceLineRequest {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(Integer productId) {
+        if (productId != null){
         this.productId = productId;
+        } else {
+            this.productId = null;
+        }
     }
     
     

@@ -15,9 +15,12 @@ import com.dovile.DAO.ProductDAO;
 import com.dovile.model.Invoice;
 import com.dovile.model.InvoiceLine;
 import com.dovile.model.Product;
+import com.dovile.model.requests.InvoiceLineRequest;
+import com.dovile.model.requests.InvoiceRequest;
 import com.dovile.model.requests.ProductEditRequest;
 import com.dovile.services.ProductServices;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -111,15 +114,19 @@ public class AdminController {
       @PostMapping("/registerInvoice")
      public String registerNewInvoice(
              HttpServletRequest request
-             ,@ModelAttribute("invoice") Invoice invoice
+             ,@ModelAttribute("invoice") InvoiceRequest invoiceRequest
      ){
-        
-         Date invoiceDate = invoice.getRecieveDate();
-         String supplier = invoice.getSupplier();
-         List<InvoiceLine> lines =  invoice.getInvoiceLineList();
-         invoice.setInvoiceLineList(null);
- 
-                  
+         
+         Date invoiceDate =  invoiceRequest.getRecieveDate();
+         String supplier = invoiceRequest.getSupplier();
+         
+         Invoice invoice = new Invoice();
+         invoice.setSupplier(supplier);
+         invoice.setRecieveDate(invoiceDate);
+         
+         List<InvoiceLineRequest> requestLines =  invoiceRequest.getInvoiceLineList();
+         List<InvoiceLine> lines = new ArrayList<>();
+                   
        invoiceDAO.saveAndFlush(invoice);        
        
        List<Invoice> invoices = invoiceDAO.findByDateAndSupplier(invoiceDate, supplier);
@@ -128,21 +135,41 @@ public class AdminController {
        if (invoices != null){
            registeredInvoice = invoices.get(invoices.size()-1);   
 
-          for (InvoiceLine line : lines){
-           
-              line.setInvoiceId(registeredInvoice);
-              // perdaryti, kad butu find byId , duomenu padavimui naudoti
-              // InvoiceRequest, kur invoiceId = integer, o productId is vis nera 
-              Product product = productDAO.findByName(line.getName());
+          for (InvoiceLineRequest requestLine : requestLines){
+                             
+              InvoiceLine line = new InvoiceLine();
               
+              line.setInvoiceId(registeredInvoice);
+              line.setCount(requestLine.getCount());
+              line.setName(requestLine.getName());
+              line.setPrice(requestLine.getPrice());
+             
+             Integer productId = null;
+             
+             try{
+             productId = requestLine.getProductId();
+             } catch(NullPointerException e){
+             // suppress warning
+             }
+             
+              System.out.println("!!!!!!!!" + productId);
+             Product product = null;
+             
+             
+             if (productId != null)
+             product = productDAO.getOne(productId);
+             
+ 
               if (product == null){
                 product = productServices.newProduct(line);
               } else {
-                product.setCount(product.getCount() + line.getCount());
+                product.setCount(product.getCount() + requestLine.getCount());
+                product.setAvailable(product.getAvailable() + requestLine.getCount());
                 productDAO.save(product);
               }
-              
+            
               line.setProductId(product);
+
               invoiceLineDAO.save(line);                             
           }                  
        }

@@ -7,6 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib  uri="http://www.springframework.org/tags" prefix="spring"%>
+ <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -31,11 +32,11 @@
                 <div>
                     <div>
                         <label name="recieveDate">Recieve Date: </label> 
-                        <input type="date" name="recieveDate"/>
+                        <input type="date" name="recieveDate" required = "required"/>
                     </div>
                     <div>
                         <label name="supplier">Supplier: </label> 
-                        <input name="supplier"/>
+                        <input name="supplier" required = "required"/>
                     </div>
                 </div>    
                 </br>
@@ -49,26 +50,22 @@
                     </c:if>  
                     <c:forEach begin="1" end="${count}" varStatus="loop">
                         <li>
-<!--                            <div>
-                                <label name="count">Count:  </label> 
-                                <input type= "number" name="invoiceLineList[${loop.index-1}].indvoiceId" value="1"/>
-                            </div>
+
                              <div>
-                                <label name="count">Count:  </label> 
-                                <input type= "number" name="invoiceLineList[${loop.index-1}].productId" value="1"/>
-                            </div>-->
-                                               
+                                <label name="count">Id (Product identificator, if new good please leave blank) </label> 
+                                <input type= "number" name="invoiceLineList[${loop.index-1}].productId" max="${fn:length(products)}" />
+                            </div>                                               
                             <div>
                                 <label name="count">Count:  </label> 
-                                <input type= "number" name="invoiceLineList[${loop.index-1}].count" value="1"/>
+                                <input type= "number" name="invoiceLineList[${loop.index-1}].count" value="1" required="required"/>
                             </div>
                             <div>
                                 <label name="price">Price:  </label> 
-                                <input name="invoiceLineList[${loop.index-1}].price" pattern="\d+(.\d{2})?" value="1.25" required="required"/>   
+                                <input name="invoiceLineList[${loop.index-1}].price" pattern="\d+(.\d{2})?"/>   
                             </div>
                             <div>   
                                 <label name="name">Name:  </label> 
-                                <input name="invoiceLineList[${loop.index-1}].name" value="gele" required="required"/>
+                                <input name="invoiceLineList[${loop.index-1}].name" value="placeholer" required = "required"/>
                             </div>
                         </li>
                         <c:set var="index" value="${index +1 }" scope="page"/>    
@@ -84,7 +81,7 @@
 
                         <thead>
                         <th>
-                            No.
+                            Id.
                         </th>
                         <th>
                             Name  

@@ -17,7 +17,7 @@ public class InvoiceRequest {
     
     private Date recieveDate;    
     private String supplier;        
-    List<InvoiceLineRequest> invoiceLines;
+    List<InvoiceLineRequest> invoiceLineList;
 
     public Date getRecieveDate() {
         return recieveDate;
@@ -38,18 +38,18 @@ public class InvoiceRequest {
     public InvoiceRequest(Date recieveDate, String supplier, List<InvoiceLineRequest> invoiceLines) {
         this.recieveDate = recieveDate;
         this.supplier = supplier;
-        this.invoiceLines = invoiceLines;
+        this.invoiceLineList = invoiceLines;
     }
        
     public InvoiceRequest() {
     }
              
-    public List<InvoiceLineRequest> getInvoiceLines() {
-        return invoiceLines;
+    public List<InvoiceLineRequest> getInvoiceLineList() {
+        return invoiceLineList;
     }
 
-    public void setInvoiceLines(List<InvoiceLineRequest> invoiceLines) {
-        this.invoiceLines = invoiceLines;
+    public void setInvoiceLineList(List<InvoiceLineRequest> invoiceLineList) {
+        this.invoiceLineList = invoiceLineList;
     }
     
     
