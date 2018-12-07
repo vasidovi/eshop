@@ -45,7 +45,7 @@
                         <li>
                             <button type="button" class="remove">Remove</button>
                             <div>
-                                <label name="count">Id (Product identificator, if new good please leave blank) </label> 
+                                <label name="count">Id (product identifier, if new good please leave blank) </label> 
                                 <input type= "number" name="invoiceLineList[0].productId" max="${fn:length(products)}" />
                             </div>                                               
                             <div>
@@ -148,7 +148,7 @@
 
             var toDoubleDigits = function (i) {
                 i = "" + i;
-                if (i.length == 1) {
+                if (i.length === 1) {
                     i = "0" + i;
                 }
                 return i;

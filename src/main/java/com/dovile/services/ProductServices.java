@@ -44,42 +44,6 @@ public class ProductServices {
         }
         return product;
       }
-    @Transactional
-     public Product reduceProductAvailableCountBy(Integer productId, Integer number){
-        
-       Product product = selectProduct(productId);
-        Integer available = product.getAvailable();        
-        if (available >= number) {
-        product.setAvailable(available  - number);
-        productDAO.save(product);        
-        } else {
-            log.error("trying to reduce available product by " + number + " , when only " + available +" is available");
-        }
-        return product;
-    }
-     
-    @Transactional 
-    public Product increaseProductAvailableCountBy(Integer productId, Integer number){
-        
-       Product product = selectProduct(productId);
-       Integer available = product.getAvailable();        
-
-       product.setAvailable(available  + number);
-       productDAO.save(product);        
-    
-        return product;
-    } 
-    
-       //not used ???
-        public Product convertBasketLineIntoProductObj(BasketLine bl){
-     
-        Product p = new Product();
-        p.setName(bl.getName());
-        p.setPrice(bl.getPrice());
-        p.setCount(bl.getCount());
-        p.setAvailable(bl.getCount());
-        return p;
-    }
     
     @Transactional
     public Product newProduct(InvoiceLine invoiceLine){
@@ -87,7 +51,6 @@ public class ProductServices {
         Product product = new Product();
        
         product.setCount(invoiceLine.getCount());
-        product.setAvailable(invoiceLine.getCount());
         product.setName(invoiceLine.getName());
         if (invoiceLine.getPrice() != null){
        
@@ -107,10 +70,7 @@ public class ProductServices {
         
         return product;
     }    
-        
-        
-        
-    
+                            
      @Transactional
        public Product selectProduct(Integer productId){
         

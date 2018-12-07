@@ -33,27 +33,6 @@ public class UserServices {
         return false;
         }
     
-//    public User getUserFormCookie(HttpServletRequest request){
-//        String  cookieName ="username";
-//        String  usernameStr = "";
-//        
-//        try {
-//        for (Cookie c : request.getCookies()){
-//            if (c.getName().equals(cookieName)){
-//                usernameStr = c.getValue();                 
-//               break;
-//            }                
-//        }
-//        } catch (NullPointerException e){
-//            return null;
-//        }
-//        
-//        User user = null;
-//        if (!usernameStr.isEmpty()){
-//            user = userDAO.findByUsername(usernameStr);
-//        }
-//        return user;
-//    }       
  
 }
 

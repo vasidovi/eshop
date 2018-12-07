@@ -55,7 +55,7 @@
                 <p class="hidden"><c:out value="${product.id}" /></p>
                 <p><c:out value="${product.name}" /></p>
                 <div>
-                    <p> Available: <c:out value="${product.available}" /></p>
+                    <p> Available: <c:out value="${product.count}" /></p>
                     <p> Price: <c:out value="${product.price}" /></p>
                 </div>
                 <div>
@@ -72,7 +72,7 @@
                                <input name="price" value="${product.price}" />
                         </div>
                            <div>
-                              <input name="count" type="number" path="count" min="0" max="${product.available}" style="width: 40px"  value="1"/>
+                              <input name="count" type="number" path="count" min="0" max="${product.count}" style="width: 40px"  value="1"/>
                         </div>                      
                         <div>
                               <button type="submit" name="submit" value="submit">to Basket</button> 

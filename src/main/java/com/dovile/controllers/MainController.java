@@ -73,8 +73,6 @@ public class MainController {
         HttpSession session = request.getSession();
         String usernameStr = (String) session.getAttribute("username");
 
-        // krepselis - nauja logika, kad tik vartotojui paspaudus ant prekes yra 
-        // sukuriamas krepselis
         Basket activeBasket;
         List<BasketLine> lines = new ArrayList<>();
 
@@ -125,9 +123,6 @@ public class MainController {
     public String addToBasket(HttpServletRequest request, @ModelAttribute("product") Product product) {
         Basket activeBasket = basketServices.getOrCreateBasket(request);
         basketLineServices.addItemsToBasket(activeBasket, product);
-        // rezervacija - anoniminiams vartotojams galioja amzinai :(
-        //reikia padaryti, jeigu sesija pasibaige ir  kreprselis nebuvo nupirktas, kad atlaisvintu is tu krepseliu prekes
-        productServices.reduceProductAvailableCountBy(product.getId(), product.getCount());
         return "redirect:/";
     }
 
@@ -141,9 +136,6 @@ public class MainController {
         if (lines == null) {
             basketDAO.delete(activeBasket);
         }
-
-        productServices.increaseProductAvailableCountBy(product.getId(), product.getCount());
-
         return "redirect:/basket";
     }
 
@@ -199,7 +191,6 @@ public class MainController {
                 return "redirect:/admin_page";
             }
             
-            // Don't  ever do toString() if there is a possibility of null!!!           
             Basket sessionBasket = basketServices.getActiveBasket(request);
             Basket userBasket = basketServices.getUserBasket(request, user);
 
@@ -232,9 +223,6 @@ public class MainController {
         for (BasketLine line : basketLines) {
             Integer reserved = line.getCount();
             Integer productId = line.getProductId().getId();
-            if (reserved > 0) {
-                productServices.increaseProductAvailableCountBy(productId, reserved);
-            }
         }
 
         session.invalidate();

@@ -32,8 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id")
     , @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name")
     , @NamedQuery(name = "Product.findByCount", query = "SELECT p FROM Product p WHERE p.count = :count")
-    , @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price")
-    , @NamedQuery(name = "Product.findByAvailable", query = "SELECT p FROM Product p WHERE p.available = :available")})
+    , @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price")})
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,11 +55,6 @@ public class Product implements Serializable {
     @NotNull
     @Column(name = "price")
     private BigDecimal price;
-    
-    @Basic(optional = false)
-    @NotNull    
-    @Column(name = "available")
-    private Integer available;
 
     public Product() {
     }
@@ -106,14 +100,6 @@ public class Product implements Serializable {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public Integer getAvailable() {
-        return available;
-    }
-
-    public void setAvailable(Integer available) {
-        this.available = available;
     }
 
     @Override

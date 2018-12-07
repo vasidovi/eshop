@@ -67,9 +67,6 @@
                     <td>
                         <input name="price" value="${product.price}" pattern="\d+(.\d{2})?" />
                     </td>
-                    <td>
-                        <input name="available" value="${product.available}"/>
-                    </td>
                      <td>
                         <c:out value = "${product.count}"/>
                     </td>                    

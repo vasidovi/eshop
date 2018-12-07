@@ -63,7 +63,6 @@ public class AdminController {
        p.setName(productModel.getName());
        
        p.setPrice(productModel.getPrice());
-       p.setAvailable(productModel.getAvailable());         
        productDAO.save(p);
        
       return "redirect:/admin_page";
@@ -163,7 +162,6 @@ public class AdminController {
                 product = productServices.newProduct(line);
               } else {
                 product.setCount(product.getCount() + requestLine.getCount());
-                product.setAvailable(product.getAvailable() + requestLine.getCount());
                 productDAO.save(product);
               }
             

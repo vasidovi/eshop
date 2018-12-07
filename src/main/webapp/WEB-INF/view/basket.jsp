@@ -107,7 +107,7 @@
                                <input name="price" value="${line.price}" />
                         </div>
                            <div>
-                              <input name="count" type="number" min="1" max="${line.count}" style="width: 40px"/>
+                              <input name="count" type="number" min="1" max="${line.count}" required="required" style="width: 40px"/>
                         </div>                      
                         <div>
                               <button type="submit" name="submit" value="submit">from Basket</button> 
