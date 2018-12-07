@@ -73,9 +73,7 @@ public class AdminController {
 
     if (validAccess){
                 model.addAttribute("user", "Administrator");
-                model.addAttribute("products", productDAO.findAll());
-        
-         
+                model.addAttribute("products", productDAO.findAll());                 
             return "admin";        
         } else {
          return "index";   
@@ -110,12 +108,10 @@ public class AdminController {
 		binder.registerCustomEditor(Date.class, "recieveDate", new CustomDateEditor(dateFormat, true));
 	}
      
-     // I recieve form, everything else is untried and untested...
       @PostMapping("/registerInvoice")
      public String registerNewInvoice(
              HttpServletRequest request
              ,@ModelAttribute("invoice") Invoice invoice
-//             , @PathVariable("line_count") Integer count
      ){
         
          Date invoiceDate = invoice.getRecieveDate();
@@ -131,13 +127,12 @@ public class AdminController {
        
        if (invoices != null){
            registeredInvoice = invoices.get(invoices.size()-1);   
-          
-          
 
           for (InvoiceLine line : lines){
            
               line.setInvoiceId(registeredInvoice);
-              // perdaryti, kad butu find byId , duomenu padavimui naudoti InvoiceRequest, kur invoiceId = integer, o productId is vis nera 
+              // perdaryti, kad butu find byId , duomenu padavimui naudoti
+              // InvoiceRequest, kur invoiceId = integer, o productId is vis nera 
               Product product = productDAO.findByName(line.getName());
               
               if (product == null){
