@@ -22,6 +22,7 @@
     </head>
     <body>
 
+      
         <a href="${pageContext.request.contextPath}/logout"><button>Logout</button></a>
         <a href="${pageContext.request.contextPath}/admin_page"><button>To Good List</button></a>
         <a href="${pageContext.request.contextPath}/new_product"><button>New Product</button></a>
@@ -71,7 +72,7 @@
                         <c:set var="index" value="${index +1 }" scope="page"/>    
                     </c:forEach>                          
                 </ol>
-                <input type="submit" value="Submit">
+                <input type="submit" value="Submit">                
             </form>
             <c:if test="${not empty products}">  
                 <div>
@@ -113,5 +114,16 @@
             </div>     
 
         </div>
+         <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" language="javascript">         
+                    $(document).ready( function() {        
+        console.log("I am here");        
+    });
+                
+                
+                
+                
+       </script>         
     </body>
 </html>
