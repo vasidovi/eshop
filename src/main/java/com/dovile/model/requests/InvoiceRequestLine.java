@@ -11,17 +11,17 @@ import java.math.BigDecimal;
  *
  * @author Dovile
  */
-public class InvoiceLineRequest {
+public class InvoiceRequestLine {
     
     private int count;
     private BigDecimal price;    
     private String name;      
     private Integer productId;
 
-    public InvoiceLineRequest() {
+    public InvoiceRequestLine() {
     }
 
-    public InvoiceLineRequest(int count, BigDecimal price, String name, Integer productId) {
+    public InvoiceRequestLine(int count, BigDecimal price, String name, Integer productId) {
         this.count = count;
         this.price = price;
         this.name = name;

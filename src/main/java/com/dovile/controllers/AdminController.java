@@ -15,9 +15,10 @@ import com.dovile.DAO.ProductDAO;
 import com.dovile.model.Invoice;
 import com.dovile.model.InvoiceLine;
 import com.dovile.model.Product;
-import com.dovile.model.requests.InvoiceLineRequest;
+import com.dovile.model.requests.InvoiceRequestLine;
 import com.dovile.model.requests.InvoiceRequest;
 import com.dovile.model.requests.ProductEditRequest;
+import com.dovile.services.InvoiceServices;
 import com.dovile.services.ProductServices;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,6 +49,9 @@ public class AdminController {
     private ProductServices productServices;
     
     @Autowired
+    private InvoiceServices invoiceServices;
+    
+    @Autowired
     private InvoiceLineDAO invoiceLineDAO;
     
     @Autowired
@@ -60,8 +64,7 @@ public class AdminController {
         
        Product p = productDAO.getOne(productModel.getId());          
        
-       p.setName(productModel.getName());
-       
+       p.setName(productModel.getName());       
        p.setPrice(productModel.getPrice());
        productDAO.save(p);
        
@@ -82,24 +85,19 @@ public class AdminController {
         }
 }
          
-    // make into post mapping
     @GetMapping("/newShipment")
      public String registerNewShipmentv2(HttpServletRequest request,
              Model model
-//            ,@PathVariable Integer lines
      ) {
           HttpSession session = request.getSession();
         Boolean validAccess = (Boolean) session.getAttribute("admin");
         
         if (validAccess){
                             model.addAttribute("products", productDAO.findAll());
-
-//            model.addAttribute("lines", lines);
             return "shipmentform";        
         } else {
          return "index";   
-        }
-    
+        }    
      }
           
      @InitBinder
@@ -115,26 +113,20 @@ public class AdminController {
              HttpServletRequest request
              ,@ModelAttribute("invoice") InvoiceRequest invoiceRequest
      ){
-         
-         Date invoiceDate =  invoiceRequest.getRecieveDate();
-         String supplier = invoiceRequest.getSupplier();
-         
-         Invoice invoice = new Invoice();
-         invoice.setSupplier(supplier);
-         invoice.setRecieveDate(invoiceDate);
-         
-         List<InvoiceLineRequest> requestLines =  invoiceRequest.getInvoiceLineList();
-         List<InvoiceLine> lines = new ArrayList<>();
-                   
-       invoiceDAO.saveAndFlush(invoice);        
+        
+         Invoice invoice = invoiceServices.saveInvoice(invoiceRequest);
+        
+         List<InvoiceRequestLine> requestLines =  invoiceRequest.getInvoiceLineList();
+         List<InvoiceLine> lines = new ArrayList<>();                                
        
-       List<Invoice> invoices = invoiceDAO.findByDateAndSupplier(invoiceDate, supplier);
+       List<Invoice> invoices = invoiceDAO.findByDateAndSupplier(invoice.getRecieveDate(), invoice.getSupplier());
+       
        Invoice registeredInvoice = null;
        
        if (invoices != null){
            registeredInvoice = invoices.get(invoices.size()-1);   
 
-          for (InvoiceLineRequest requestLine : requestLines){
+          for (InvoiceRequestLine requestLine : requestLines){
                              
               InvoiceLine line = new InvoiceLine();
               
