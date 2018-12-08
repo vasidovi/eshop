@@ -51,6 +51,6 @@
     </filter>
     <filter-mapping>
         <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/secretpage</url-pattern>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
 </web-app>

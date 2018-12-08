@@ -102,7 +102,7 @@
                             <form>
                       <input type="hidden" name="hasUser" value="${hasUser}">
                       <input type="hidden" name="isPurchased" value="${isPurchased}">
-                      <input  name="id" value="${basket.id}">
+                      <input type="hidden" name="id" value="${basket.id}">
                       <button>Show Products</button>
                             </form>
                         

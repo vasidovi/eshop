@@ -57,15 +57,20 @@
                       entity-manager-factory-ref="entityManagerFactoryBean" />
     
     
-     <security:http pattern="*/" security="none"/>
-  
+           <security:http pattern="/" security="none"/>
+           <security:http pattern="/to_basket" security="none"/>
+
+
      <security:http auto-config="true">
-         <security:intercept-url pattern="*/" access="permitAll" />
-         <security:intercept-url pattern="/buy" access="hasAuthority('USER')" />       
-        <security:intercept-url pattern="/secretpage" access="hasAuthority('ADMIN')" />
-<!--        <security:intercept-url pattern="*/" access="hasAuthority('ADMIN')" />-->
+
+<!--         <security:intercept-url pattern="/*" access="permitAll" />-->
+         <security:intercept-url pattern="/from_basket" access="hasAuthority('USER')" />       
+<!--        <security:intercept-url pattern="/secretpage" access="hasAuthority('ADMIN')" />-->
+<!--        <security:intercept-url pattern="/*" access="hasAuthority('ADMIN')" />-->
 <!--        <security:form-login login-page="/mylogin" />-->
     </security:http>
+    
+
 
     <security:authentication-manager>
         <security:authentication-provider ref="authProvider"/>
