@@ -10,18 +10,15 @@ package com.dovile.controllers;
  * @author Dovile
  */
 import com.dovile.DAO.InvoiceDAO;
-import com.dovile.DAO.InvoiceLineDAO;
 import com.dovile.DAO.ProductDAO;
 import com.dovile.model.Invoice;
-import com.dovile.model.InvoiceLine;
 import com.dovile.model.Product;
 import com.dovile.model.requests.InvoiceRequestLine;
 import com.dovile.model.requests.InvoiceRequest;
 import com.dovile.model.requests.ProductEditRequest;
+import com.dovile.services.InvoiceLineServices;
 import com.dovile.services.InvoiceServices;
-import com.dovile.services.ProductServices;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -35,134 +32,94 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class AdminController {
-    
+
     @Autowired
     private ProductDAO productDAO;
-    
-    @Autowired
-    private ProductServices productServices;
-    
+
     @Autowired
     private InvoiceServices invoiceServices;
     
     @Autowired
-    private InvoiceLineDAO invoiceLineDAO;
-    
+    private InvoiceLineServices invoiceLineServices;
+
     @Autowired
     private InvoiceDAO invoiceDAO;
-           
-    
+
     @RequestMapping("editProductDetail")
     public String editProductDetail(HttpServletRequest request,
             @ModelAttribute("editProductDetail") ProductEditRequest productModel) {
-        
-       Product p = productDAO.getOne(productModel.getId());          
-       
-       p.setName(productModel.getName());       
-       p.setPrice(productModel.getPrice());
-       productDAO.save(p);
-       
-      return "redirect:/admin_page";
+
+        Product p = productDAO.getOne(productModel.getId());
+
+        p.setName(productModel.getName());
+        p.setPrice(productModel.getPrice());
+        productDAO.save(p);
+
+        return "redirect:/admin_page";
     }
-    
+
     @GetMapping("/admin_page")
-       public String adminPage(HttpServletRequest request, Model model) {
+    public String adminPage(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
         Boolean validAccess = (Boolean) session.getAttribute("admin");
 
-    if (validAccess){
-                model.addAttribute("user", "Administrator");
-                model.addAttribute("products", productDAO.findAll());                 
-            return "admin";        
+        if (validAccess) {
+            model.addAttribute("user", "Administrator");
+            model.addAttribute("products", productDAO.findAll());
+            return "admin";
         } else {
-         return "index";   
+            return "index";
         }
-}
-         
+    }
+
     @GetMapping("/newShipment")
-     public String registerNewShipmentv2(HttpServletRequest request,
-             Model model
-     ) {
-          HttpSession session = request.getSession();
+    public String registerNewShipmentv2(HttpServletRequest request,
+            Model model
+    ) {
+        HttpSession session = request.getSession();
         Boolean validAccess = (Boolean) session.getAttribute("admin");
-        
-        if (validAccess){
-                            model.addAttribute("products", productDAO.findAll());
-            return "shipmentform";        
+
+        if (validAccess) {
+            model.addAttribute("products", productDAO.findAll());
+            return "shipmentform";
         } else {
-         return "index";   
-        }    
-     }
-          
-     @InitBinder
-	public void dataBinding(WebDataBinder binder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		dateFormat.setLenient(false);
-                dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-		binder.registerCustomEditor(Date.class, "recieveDate", new CustomDateEditor(dateFormat, true));
-	}
-     
-      @PostMapping("/registerInvoice")
-     public String registerNewInvoice(
-             HttpServletRequest request
-             ,@ModelAttribute("invoice") InvoiceRequest invoiceRequest
-     ){
-        
-         Invoice invoice = invoiceServices.saveInvoice(invoiceRequest);
-        
-         List<InvoiceRequestLine> requestLines =  invoiceRequest.getInvoiceLineList();
-         List<InvoiceLine> lines = new ArrayList<>();                                
-       
-       List<Invoice> invoices = invoiceDAO.findByDateAndSupplier(invoice.getRecieveDate(), invoice.getSupplier());
-       
-       Invoice registeredInvoice = null;
-       
-       if (invoices != null){
-           registeredInvoice = invoices.get(invoices.size()-1);   
+            return "index";
+        }
+    }
 
-          for (InvoiceRequestLine requestLine : requestLines){
-                             
-              InvoiceLine line = new InvoiceLine();
-              
-              line.setInvoiceId(registeredInvoice);
-              line.setCount(requestLine.getCount());
-              line.setName(requestLine.getName());
-              line.setPrice(requestLine.getPrice());
-             
-             Integer productId = null;
-             
-             try{
-             productId = requestLine.getProductId();
-             } catch(NullPointerException e){
-             // suppress warning
-             }
-             
-             Product product = null;
-             
-             
-             if (productId != null)
-             product = productDAO.getOne(productId);
-             
- 
-              if (product == null){
-                product = productServices.newProduct(line);
-              } else {
-                product.setCount(product.getCount() + requestLine.getCount());
-                productDAO.save(product);
-              }
-            
-              line.setProductId(product);
+    @InitBinder
+    public void dataBinding(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        binder.registerCustomEditor(Date.class, "recieveDate", new CustomDateEditor(dateFormat, true));
+    }
 
-              invoiceLineDAO.save(line);                             
-          }                  
-       }
-          return "redirect:/admin_page";
-     }
-     
-     }
+    @PostMapping("/registerInvoice")
+    public String registerNewInvoice(
+            HttpServletRequest request,
+             @ModelAttribute("invoice") InvoiceRequest invoiceRequest
+    ) {
+        Invoice invoice = invoiceServices.saveInvoice(invoiceRequest);
+
+        List<InvoiceRequestLine> requestLines = invoiceRequest.getInvoiceLineList();        
+        Invoice registeredInvoice = null;
+        
+        List<Invoice> invoices = invoiceDAO.findByDateAndSupplier(invoice.getRecieveDate(), invoice.getSupplier()); 
+       
+        if (invoices != null) {
+            registeredInvoice = invoices.get(invoices.size() - 1);
+
+            for (InvoiceRequestLine requestLine : requestLines) {                
+                invoiceLineServices.saveInvoiceLine(requestLine, registeredInvoice);               
+            }
+        }
+        return "redirect:/admin_page";
+    }
+
+}
