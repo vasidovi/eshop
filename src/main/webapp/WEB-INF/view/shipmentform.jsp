@@ -25,7 +25,6 @@
 
         <a href="${pageContext.request.contextPath}/logout"><button>Logout</button></a>
         <a href="${pageContext.request.contextPath}/admin_page"><button>To Goods List</button></a>
-        <a href="${pageContext.request.contextPath}/new_product"><button>New Product</button></a>
 
         <div class="container">
 
@@ -42,25 +41,25 @@
                 </div>    
                 </br>
                 <ol class="item">
-                        <li>
-                            <button type="button" class="remove">Remove</button>
-                            <div>
-                                <label name="count">Id (product identifier, if new good please leave blank) </label> 
-                                <input type= "number" name="invoiceLineList[0].productId" max="${fn:length(products)}" />
-                            </div>                                               
-                            <div>
-                                <label name="count">Count:  </label> 
-                                <input type= "number" name="invoiceLineList[0].count" value="1" required="required"/>
-                            </div>
-                            <div>
-                                <label name="price">Price:  </label> 
-                                <input name="invoiceLineList[0].price" pattern="\d+(.\d{2})?"/>   
-                            </div>
-                            <div>   
-                                <label name="name">Name:  </label> 
-                                <input name="invoiceLineList[0].name"/>
-                            </div>
-                        </li>                    
+                    <li>
+                        <button type="button" class="remove">Remove</button>
+                        <div>
+                            <label name="count">Id (product identifier, if new good please leave blank) </label> 
+                            <input type= "number" name="invoiceLineList[0].productId" max="${fn:length(products)}" />
+                        </div>                                               
+                        <div>
+                            <label name="count">Count:  </label> 
+                            <input type= "number" name="invoiceLineList[0].count" value="1" required="required"/>
+                        </div>
+                        <div>
+                            <label name="price">Price:  </label> 
+                            <input name="invoiceLineList[0].price" pattern="\d+(.\d{2})?"/>   
+                        </div>
+                        <div>   
+                            <label name="name">Name:  </label> 
+                            <input name="invoiceLineList[0].name"/>
+                        </div>
+                    </li>                    
                 </ol>
                 <button type="button" id="add-new" style="width: 80px">Add New</button>
                 <input type="submit" value="Submit">                
@@ -84,20 +83,19 @@
                                 <c:set var="count" value="${count + 1}" scope="page"/>
 
                                 <tr>
-                                    <td>
+                                    <td class="productId">
                                         <c:out value = "${product.id}"/>
-                <!--                        <input name="id" value="${product.id}" class="hidden"/>-->
                                     </td>
-                                    <td>
+                                    <td class="productName">
                                         <c:out value = "${product.name}"/>
-                 <!--                       <input name="name" value="${product.name}" />-->
                                     </td>
 
                                     <td>
-                                        <button id="addExisting">Add</button> 
+                                        <button class="addExisting">Add</button> 
                                     </td>
+                                </tr>    
 
-                                </c:forEach>
+                            </c:forEach>
                         </tbody>
 
                     </table>
@@ -112,43 +110,66 @@
 
 
             $("#add-new").click(function () {
-                $(".item li:last").clone()
-                        .find("input").each(function () {
-                    $(this).attr('name', function (_, attr) {
-                        var i = attr.match(/[0-9]+/g);
-                        var returnIndex = attr.replace(i[0], parseInt(i[0]) + 1);
-                        return returnIndex;
-                    });
+                addNewInvoiceLine(1,"","","")
+            });
 
-                }).end()
-                        .find("input[name$=count]").attr("value", 1).end()
-                        .find(".remove").click(function () {
-                   removeItem($(this));
-                }).end()
-
-                        .appendTo(".item");
-
+            $(".addExisting").click(function () {
+                var thisElement = $(this);
+                addNewInvoiceLine(1, function () {
+                    return thisElement.parent().parent()
+                            .find("td.productId").text().trim();
+                }, "", function () {
+                    return thisElement.parent().parent()
+                            .find("td.productName").text().trim();
+                });                   
             });
 
             $(".remove").click(function () {
                 removeItem($(this));
             });
-
-
-
+            
             var d = new Date();
-            
-            
-            var removeItem = function(e) {
-                if ($(".remove").length > 1){
-                e.parent().remove();
+
+            var addNewInvoiceLine = function (count,productId, price, name) {
+                return  $(".item li:last").clone()
+                        .find("input").each(function () {
+                    $(this).attr("name", function (_, attr) {
+                        var i = attr.match(/[0-9]+/g);
+                        var returnIndex = attr.replace(i[0], parseInt(i[0]) + 1);
+                        return returnIndex;
+                    });
+                }).end()
+                        .find("input[name$=count]").val(count).end()
+                        .find("input[name$=productId]").val(productId).end()
+                        .find("input[name$=price]").val(price).end()
+                        .find("input[name$=name]").val(name).end()
+                        .find(".remove").click(function () {
+                    removeItem($(this));
+                }).end()
+                        .appendTo(".item");
             }
+
+
+            var removeItem = function (e) {
+                if ($(".remove").length > 1) {
+                    
+                 e.parent().nextAll()
+                 .find("input").each(function () {
+                    $(this).attr("name", function (_, attr) {
+                        var i = attr.match(/[0-9]+/g);
+                        var returnIndex = attr.replace(i[0], parseInt(i[0]) - 1);
+                        return returnIndex;
+                    })});
+                                       
+                    e.parent().remove();
+                }
+                          
             }
 
 
             var toDoubleDigits = function (i) {
                 i = "" + i;
-                if (i.length === 1) {
+                if (i.length == 1) {
                     i = "0" + i;
                 }
                 return i;
@@ -157,18 +178,6 @@
             var receiveDate = d.getFullYear() + "-" + toDoubleDigits(d.getMonth() + 1) + "-" + toDoubleDigits(d.getDate());
 
             $("input[name=recieveDate]").attr("value", receiveDate);
-
-
-//var i = 1;
-//$("button").click(function() ​​​{
-//  $("table tr:first").clone().find("input").each(function() {
-//    $(this).val('').attr('id', function(_, ids) { return id + i });
-//  }).end().appendTo("table");
-//  i++;
-//})​;​
-
-
-
 
         </script>         
     </body>

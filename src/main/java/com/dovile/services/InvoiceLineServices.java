@@ -36,7 +36,7 @@ public class InvoiceLineServices {
 
     
     public InvoiceLine saveInvoiceLine(InvoiceRequestLine requestLine, Invoice registeredInvoice) {
-        InvoiceLine line = new InvoiceLine();
+                InvoiceLine line = new InvoiceLine();
 
                 line.setInvoiceId(registeredInvoice);
                 line.setCount(requestLine.getCount());
