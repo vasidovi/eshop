@@ -29,10 +29,10 @@
               <a href="${pageContext.request.contextPath}/logout"><button>Logout</button></a>
             </c:if>            
        
-        <p>Welcome, ${user}</p>
+        <p>Welcome,</p>
         
         <a href="#"><button>Review invoices TBI</button></a>
-        <a href="#"><button>Review baskets TBI</button></a>
+        <a href="${pageContext.request.contextPath}/review_baskets"><button>Review baskets TBI</button></a>
         </br>      
               
          <c:if test="${not empty products}">      

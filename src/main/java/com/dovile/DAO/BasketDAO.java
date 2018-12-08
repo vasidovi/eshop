@@ -26,6 +26,12 @@ public interface BasketDAO extends JpaRepository<Basket, Integer> {
     
      @Query("Select b from Basket b where b.userId=:userId")
      public List<Basket> findByUser(@Param("userId") User userId); 
+     
+     @Query("Select b from Basket b where (false =:hasUser or b.userId is not null) and (false =:isPurchased or b.purchaseDate is not null)")
+     public List<Basket> findByUserOrPurchaseStatus(@Param("hasUser") Boolean hasUser, @Param("isPurchased") Boolean isPurchased);
+     
+     
+//     , @Param("purchased") Boolean isPurchased)
             
   }
     
