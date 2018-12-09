@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,6 +54,9 @@ public class MainController {
 
     @Autowired
     private BasketLineDAO basketLineDAO;
+    
+    @Autowired
+    PasswordEncoder encoder;
 
     @Autowired
     private BasketServices basketServices;
@@ -160,6 +164,7 @@ public class MainController {
             return "redirect:/";
 
         } else {
+            System.out.println("Trying to buy could not find userbasket" + activeBasket.getId() + "user basket "  + activeBasket.getUserId());
             return "redirect:/login";
         }
     }
@@ -169,8 +174,16 @@ public class MainController {
 
         return "login";
     }
+    
+      @GetMapping(value = {"/seed"})
+    public String seed(){
+        
+        System.out.println(encoder.encode("user"));
+        return "redirect:/";
+        
+    }
 
-    @RequestMapping("login")
+    @RequestMapping("/login")
 
     public String login(HttpServletRequest request,
             HttpServletResponse response,
@@ -178,17 +191,15 @@ public class MainController {
             @ModelAttribute("userLogin") UserLoginRequest userModel) {
 
         Boolean validLogin = userServices.validateLogin(userModel.getUsername(), userModel.getPassword());
+           
+        
+          
         if (validLogin) {
 
             User user = userDAO.findByUsername(userModel.getUsername());
                
             if (user.getAdmin() != null) {
-                
-               HttpSession session = request.getSession();
-               session.setAttribute("admin", true);
-                
-
-                return "redirect:/admin_page";
+                return "redirect:/admin";
             }
             
             Basket sessionBasket = basketServices.getActiveBasket(request);
@@ -209,10 +220,10 @@ public class MainController {
             return "redirect:/";
         } // if login invalid
         else {
-            model.addAttribute("invalid", "wrong username and password combination");
+            model.addAttribute("isInvalid", "wrong username and password combination");
         }
         // create counter for max login attempts ?  
-        return "redirect:/login";
+        return "/login";
     }
 
     @GetMapping("logout")

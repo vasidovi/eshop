@@ -86,7 +86,7 @@ public class User implements Serializable, UserDetails {
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
+    @Size(min = 1, max = 255)
     @Column(name = "username")
     public String getUsername() {
         return username;
@@ -98,7 +98,7 @@ public class User implements Serializable, UserDetails {
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
+    @Size(min = 1, max = 255)
     @Column(name = "password")    
     public String getPassword() {
         return password;

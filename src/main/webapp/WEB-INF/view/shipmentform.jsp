@@ -24,7 +24,7 @@
 
 
         <a href="${pageContext.request.contextPath}/logout"><button>Logout</button></a>
-        <a href="${pageContext.request.contextPath}/admin_page"><button>To Goods List</button></a>
+        <a href="${pageContext.request.contextPath}/admin"><button>To Goods List</button></a>
 
         <div class="container">
 

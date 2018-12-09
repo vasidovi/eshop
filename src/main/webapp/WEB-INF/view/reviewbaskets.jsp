@@ -20,14 +20,7 @@
         </style>
     </head>
     <body>
-        
-              
-          <c:out value = "${param.hasUser}"/>
-          <c:out value = "${param.isPurchased}"/>
-          <c:out value = "${param.id}"/>
-
-         
-        
+                     
           
           <c:if test="${empty user}">
             <a href="${pageContext.request.contextPath}/login"><button>Login</button></a>
@@ -35,7 +28,7 @@
              <c:if test="${not empty user}">
               <a href="${pageContext.request.contextPath}/logout"><button>Logout</button></a>
             </c:if>
-             <a href="${pageContext.request.contextPath}/admin_page"><button>To Goods List</button></a>
+             <a href="${pageContext.request.contextPath}/admin"><button>To Goods List</button></a>
              
              <div class="controller">
                  <p> Controller</p>
@@ -104,9 +97,7 @@
                       <input type="hidden" name="isPurchased" value="${isPurchased}">
                       <input type="hidden" name="id" value="${basket.id}">
                       <button>Show Products</button>
-                            </form>
-                        
-<!--                        <a href="${pageContext.request.contextPath}/review_baskets/"><button>Show Products</button></a>-->
+                            </form>                        
                     </td>
                     
                 </tr>
@@ -157,11 +148,7 @@
                     </td>                    
                     <td>
                         <c:out value = "${line.count}"/>
-                    </td>
-<!--                    <td>
-                        <a href="${pageContext.request.contextPath}/review_baskets/${basket.id}"><button>Show Products TDI</button></a>
-                    </td>-->
-                    
+                    </td>                    
                 </tr>
             </c:forEach>
         </tbody>  
@@ -176,33 +163,4 @@
            
         </div>         
     </body>
-<!--      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-        <script type="text/javascript" language="javascript">
-      
-    var reviewBasketsURL = "${pageContext.request.contextPath}/review_baskets";
-    
-    var id;
-    var isUser ="false";
-    var isBought ="false";
-    
-    on click
-    edit and send
-    
-                      url = `${reviewBasketsURL}?id=${id}&isPurchased=${isBought}&user=${isUser}` 
-    
-                        function getBasket(url, successCallback) {
-                           
-                            $.ajax({
-                                type: "GET",
-                                url: url +,
-                                dataType: "json",
-                                success: successCallback,
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    console.log("error: " + jqXHR + textStatus + errorThrown);
-                                }
-                            });
-    
-    
-    
-    </script>-->
 </html>

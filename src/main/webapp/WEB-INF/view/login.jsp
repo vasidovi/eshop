@@ -31,8 +31,8 @@
             </form>
  <br/>
  
- <c:out value="${invalid}"/>
- <p>New User? <a href="#"><button>Sign Up TBI</button></a></p>
+ <c:out value="${isInvalid}"/>
+ <p>New User? <a href="/registration"><button>Sign Up TBI</button></a></p>
  
  
 
